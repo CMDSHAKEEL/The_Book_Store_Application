@@ -3,9 +3,9 @@
 const express          =  require('express');
 const { ApolloServer}  =  require('apollo-server-express')
 const dbConfig         =  require('./DB.Config/database.config')
-const Schema           =  require('././app/WorkingoFGraphql/schema/index')
-const graphqlresolver  =  require('././app/WorkingoFGraphql/resolvers/index')
-const Auth             =  require('./app/utilities/middelware/auth')
+//const Schema           =  require('././app/WorkingoFGraphql/schema/index')
+//const graphqlresolver  =  require('././app/WorkingoFGraphql/resolvers/index')
+ 
 
 dbConfig.dbConnection();
 
@@ -19,17 +19,17 @@ const app = express()
 
 const apolloserver = new ApolloServer({
 
-    typeDefs:Schema,
-    resolvers:graphqlresolver,
+    typeDefs,
+    resolvers ,
    
-    context: Auth
+    
 })
 await apolloserver.start();
 apolloserver.applyMiddleware({app , path:"/graphql"})
 
 // listening to the port 
  
-app.listen(process.env.PORT,()=>{
+app.listen( 7000,()=>{
 
     console.log("server is running on PORT 2000")})
 }
