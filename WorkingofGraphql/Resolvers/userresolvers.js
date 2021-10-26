@@ -7,7 +7,7 @@ const Apollerror    =  require('apollo-server-errors')
  const bcryptpass    =  require('../../App/Utilites/bcrypt')
 const bcrypt        =  require('bcrypt')
 const jwt           =  require('jsonwebtoken')
-// const sendbymail    =  require('../../utilities/nodemailer') 
+ const sendbymail    =  require('../../App/Utilites/nodemailer') 
  
 
 const resolvers={
@@ -103,7 +103,24 @@ const resolvers={
                                                                    token:token,
                                                                          tokenExpiration:1
               }
-      }
+      },
+      forgotpassword: async(_,{path})=>{
+
+        const checkinguser = await userModel.findOne({email:path.email});
+        if(!checkinguser){
+            return new Apollerror.AuthenticationError('user not found .... ')
+        }
+
+        sendbymail.getMailMessage(checkinguser.email,(data)=>{
+            if(!data){
+                return new Apollerror.ApolloError('otp sending is failed')
+            }
+        })
+       return ({
+           email:path.email,
+           message:'secret code is sent to your register mail id'
+       })
+    },
        
          
     }

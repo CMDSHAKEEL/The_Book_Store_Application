@@ -20,7 +20,10 @@ type Authuser{
     tokenExpiration: Int!
 
 }
- 
+type Forgot{
+    email:String
+    message:String
+}
 
  
  
@@ -36,7 +39,9 @@ input loginUser{
     password:String
 }
  
-
+input forgotPassword{
+    email:String
+}
  
 
 
@@ -52,6 +57,7 @@ type Mutation{
 
     createuser(path:userInput):Users
     loginuser(path:loginUser):Authuser
+    forgotpassword(path:forgotPassword):Forgot
     
     
 } 
