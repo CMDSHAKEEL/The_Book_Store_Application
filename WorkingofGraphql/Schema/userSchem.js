@@ -25,7 +25,11 @@ type Forgot{
     message:String
 }
 
- 
+type Reset{
+    email:String
+    message:String
+    newpassword:String
+} 
  
  
 input userInput{
@@ -43,7 +47,11 @@ input forgotPassword{
     email:String
 }
  
-
+input resetPassword{
+    email:String
+    Code:String
+    newpassword:String
+}
 
  
  
@@ -58,7 +66,7 @@ type Mutation{
     createuser(path:userInput):Users
     loginuser(path:loginUser):Authuser
     forgotpassword(path:forgotPassword):Forgot
-    
+    resetpassword(path:resetPassword):Reset
     
 } 
 `
