@@ -11,7 +11,15 @@ type Users{
     email:String
     password:String
 }
+type Authuser{
+    userId:ID
+    firstName:String
+    lastName:String
+    email:String
+    token:String
+    tokenExpiration: Int!
 
+}
  
 
  
@@ -23,7 +31,10 @@ input userInput{
     email:String
     password:String
 } 
-
+input loginUser{
+    email:String
+    password:String
+}
  
 
  
@@ -40,7 +51,7 @@ type Query {
 type Mutation{
 
     createuser(path:userInput):Users
-     
+    loginuser(path:loginUser):Authuser
     
     
 } 

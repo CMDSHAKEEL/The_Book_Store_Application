@@ -5,8 +5,8 @@ const userModel     =  require('../../App/models/usermodel')
 const Apollerror    =  require('apollo-server-errors')
  const joiValidation =  require('../../App/Utilites/validation')
  const bcryptpass    =  require('../../App/Utilites/bcrypt')
-// const bcrtpt        =  require('bcrypt')
-// const jwt           =  require('jsonwebtoken')
+const bcrypt        =  require('bcrypt')
+const jwt           =  require('jsonwebtoken')
 // const sendbymail    =  require('../../utilities/nodemailer') 
  
 
@@ -70,7 +70,40 @@ const resolvers={
         },
 
       // login user
+      loginuser:async(_,{path})=>{
+        const login ={
+            email:path.email,
+            password:path.password
+        }
 
+        const Validationlogin = joiValidation.authLogin.validate(login);
+        if(Validationlogin.error){
+            return new Apollerror.ValidationError(Validationlogin.error)
+        }
+        const userPresent = await userModel.findOne({ email: path.email });
+        if (!userPresent) {
+          return new Apollerror.AuthenticationError('Invalid Email id Enter Valid id .....');
+        }
+
+        //checking the password user password and saved password in DB
+            
+        const correct = await  bcrypt.compare(path.password, userPresent.password);
+        if (! correct) {
+          return new Apollerror.AuthenticationError('wrong password' );
+        }
+
+         // Token generating
+
+         const token =jwt.sign({  email:path.email  },'cmdshakeel123',{
+            expiresIn:'1h'
+        })
+        return{ userId:userPresent.id,
+                            firstName:userPresent.firstName,
+                                           lastName:userPresent.lastName,
+                                                                   token:token,
+                                                                         tokenExpiration:1
+              }
+      }
        
          
     }
