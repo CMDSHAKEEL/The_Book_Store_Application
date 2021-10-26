@@ -3,8 +3,8 @@
 const express          =  require('express');
 const { ApolloServer}  =  require('apollo-server-express')
 const dbConfig         =  require('./DB.Config/database.config')
-//const Schema           =  require('././app/WorkingoFGraphql/schema/index')
-//const graphqlresolver  =  require('././app/WorkingoFGraphql/resolvers/index')
+const Schema           =  require('./WorkingofGraphql/Schema')
+const graphqlresolver  =  require('./WorkingofGraphql/Resolvers')
  
 
 dbConfig.dbConnection();
@@ -17,21 +17,22 @@ const app = express()
   
 //working of graphql 
 
-const apolloserver = new ApolloServer({
+ const apolloserver = new ApolloServer({
 
-    typeDefs,
-    resolvers ,
+    typeDefs:Schema,
+     resolvers:graphqlresolver,
    
     
-})
+ })
 await apolloserver.start();
+
 apolloserver.applyMiddleware({app , path:"/graphql"})
 
 // listening to the port 
  
-app.listen( 7000,()=>{
+app.listen(7000,()=>{
 
-    console.log("server is running on PORT 2000")})
+    console.log("server is running on PORT 7000")})
 }
 
  
