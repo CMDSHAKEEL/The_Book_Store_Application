@@ -2,6 +2,7 @@
 // importing files and packages
 
 const userModel     =  require('../../App/models/usermodel')
+const AdminModel = require('../../App/models/Admin')
 const Apollerror    =  require('apollo-server-errors')
  const joiValidation =  require('../../App/Utilites/validation')
  const bcryptpass    =  require('../../App/Utilites/bcrypt')
@@ -124,7 +125,7 @@ const resolvers={
        // Reseting the password 
         
        resetpassword: async(_,{path})=>{
-           
+
         const checkinguser = await userModel.findOne({ email:path.email})
         if(!checkinguser){
             return new Apollerror.AuthenticationError('user id does not exist')
@@ -148,6 +149,19 @@ const resolvers={
         })
      },
          
+
+     Admin: async (_,{email})=>{
+         const  admin = new AdminModel({ 
+             emailId: email
+         })
+         const existingUser = await AdminModel.findOne({ emailId: email });
+        if (existingUser) {
+          return new ApolloError.UserInputError(' The User is Already Exists');
+        }
+        admin.save()
+
+        return  "Admin Added sucessfully"
+     }
     }
 }
 module.exports =resolvers
